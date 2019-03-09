@@ -160,6 +160,18 @@ if [ ! "$STAGE" == "" ]; then
       invokeCmd "sfdx force:source:convert -d mdapiout"
       invokeCmd "sfdx force:mdapi:deploy -d mdapiout --wait 1000 -u $TARGET_SCRATCH_ORG_ALIAS"
 
+      # check to see if we need to assign permsets and/or import data
+        
+      # check to assign permset
+      if [ "$assign_permset" == "true" ]; then
+        invokeCmd "sfdx force:user:permset:assign -n $permset_name -u $TARGET_SCRATCH_ORG_ALIAS"
+      fi
+
+      # check for data plan NOTE: we aren't parsing the dataplans into an array so expect only a vale
+      if [ "$import_data" == "true" ]; then
+        invokeCmd "sfdx force:data:tree:import -p $data_plans"
+      fi
+
     else
 
       log "Calling $mdapiDeployScript"
