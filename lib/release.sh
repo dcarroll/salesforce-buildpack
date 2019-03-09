@@ -52,14 +52,15 @@ log "Parse sfdx.yml values ..."
 eval $(parse_yaml sfdx.yml)
 
 debug "scratch-org-def: $scratch_org_def"
-debug "assign-permset: $assign_permset"
-debug "permset-name: $permset_name"
+debug "assign_permset: $assign_permset"
+debug "permset_name: $permset_name"
 debug "run-apex-tests: $run_apex_tests"
 debug "delete-test-org: $delete_test_org"
 debug "delete-scratch-org: $delete_scratch_org"
 debug "show_scratch_org_url: $show_scratch_org_url"
 debug "open-path: $open_path"
-debug "data-plans: $data_plans"
+debug "import_data: $import_data"
+debug "data_plans: $data_plans"
 
 # If review app or CI
 if [ "$STAGE" == "" ]; then
@@ -80,6 +81,16 @@ if [ "$STAGE" == "" ]; then
 
   # Push source
   invokeCmd "sfdx force:source:push -u $TARGET_SCRATCH_ORG_ALIAS"
+
+  # check to assign permset
+  if [ "$assign_permset" == "true" ]; then
+    invokeCmd "sfdx force:user:permset:assign -n $permset_name -u $TARGET_SCRATCH_ORG_ALIAS"
+  fi
+
+  # check for data plan NOTE: we aren't parsing the dataplans into an array so expect only a vale
+  if [ "$import_data" == "true" ]; then
+    invokeCmd "sfdx force:data:tree:import -p $data_plans"
+  fi
 
   # Show scratch org URL
   if [ "$show_scratch_org_url" == "true" ]; then
