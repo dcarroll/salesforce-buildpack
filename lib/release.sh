@@ -157,7 +157,7 @@ if [ ! "$STAGE" == "" ]; then
     if [ ! -f "$mdapiDeployScript" ];
     then
 
-      invokeCmd "sfdx force:source:convert -d mdapiout"
+      invokeCmd "sfdx force:source:convert -d mdapiout -n $SFDX_PACKAGE_NAME "
       invokeCmd "sfdx force:mdapi:deploy -d mdapiout --wait 1000 -u $TARGET_SCRATCH_ORG_ALIAS"
 
       # check to see if we need to assign permsets and/or import data
