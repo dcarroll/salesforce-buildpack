@@ -62,7 +62,7 @@ debug "open-path: $open_path"
 debug "import_data: $import_data"
 debug "data_plans: $data_plans"
 
-invokeCmd "node $vendorDir/bin/test.js"
+invokeCmd "node bin/test.js"
 
 # If review app or CI
 if [ "$STAGE" == "" ]; then
