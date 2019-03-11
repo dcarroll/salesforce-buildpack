@@ -51,14 +51,14 @@ log "[BASH] Parse sfdx.yml values ..."
 #BUG: not parsing arrays properly
 eval $(parse_yaml sfdx.yml)
 
-debug "scratch-org-def: $scratch_org_def"
+debug "scratch_org_def: $scratch_org_def"
 debug "assign_permset: $assign_permset"
 debug "permset_name: $permset_name"
-debug "run-apex-tests: $run_apex_tests"
-debug "delete-test-org: $delete_test_org"
-debug "delete-scratch-org: $delete_scratch_org"
+debug "run_apex_tests: $run_apex_tests"
+debug "delete_test_org: $delete_test_org"
+debug "delete_scratch_org: $delete_scratch_org"
 debug "show_scratch_org_url: $show_scratch_org_url"
-debug "open-path: $open_path"
+debug "open_path: $open_path"
 debug "import_data: $import_data"
 debug "data_plans: $data_plans"
 
@@ -66,7 +66,7 @@ debug "data_plans: $data_plans"
 # As long as most of the var have been created as env vars it should
 # be easy to access the values set during the compile state.
 # There may be a few values to pass to the node process.
-invokeCmd "node bin/release.js $vendorDir $TARGET_SCRATCH_ORG_ALIAS $SFDX_PACKAGE_VERSION_ID"
+invokeCmd "node bin/release.js $vendorDir $TARGET_SCRATCH_ORG_ALIAS $SFDX_PACKAGE_VERSION_ID $STAGE"
 
 exit 0
 
