@@ -182,8 +182,8 @@ then
   
   if [ ! -f $testSetupScript ]; then
     log "Creating $testSetupScript ..."
-     echo "# Log testing org
-sfdx force:org:display -u $TARGET_SCRATCH_ORG_ALIAS" > $testSetupScript
+    echo "# Log testing org
+    sfdx force:org:display -u $TARGET_SCRATCH_ORG_ALIAS" > $testSetupScript
     chmod +x $testSetupScript
     cat $testSetupScript
   fi

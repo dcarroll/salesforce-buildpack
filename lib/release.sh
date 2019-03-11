@@ -45,7 +45,7 @@ debug "SFDX_PACKAGE_VERSION_ID: $SFDX_PACKAGE_VERSION_ID"
 whoami=$(whoami)
 debug "WHOAMI: $whoami"
 
-log "Parse sfdx.yml values ..."
+log "[BASH] Parse sfdx.yml values ..."
 
 # Parse sfdx.yml file into env
 #BUG: not parsing arrays properly
@@ -66,7 +66,7 @@ debug "data_plans: $data_plans"
 # As long as most of the var have been created as env vars it should
 # be easy to access the values set during the compile state.
 # There may be a few values to pass to the node process.
-invokeCmd "node bin/release.js $vendorDir"
+invokeCmd "node bin/release.js $vendorDir $TARGET_SCRATCH_ORG_ALIAS $SFDX_PACKAGE_VERSION_ID"
 
 exit 0
 
