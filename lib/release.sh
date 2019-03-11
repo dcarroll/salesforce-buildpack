@@ -62,7 +62,13 @@ debug "open-path: $open_path"
 debug "import_data: $import_data"
 debug "data_plans: $data_plans"
 
-invokeCmd "node bin/test.js"
+# This invokes a JS script to handle all the release process logic.
+# As long as most of the var have been created as env vars it should
+# be easy to access the values set during the compile state.
+# There may be a few values to pass to the node process.
+invokeCmd "node bin/test.js $vendorDir"
+
+exit 0
 
 # If review app or CI
 if [ "$STAGE" == "" ]; then
