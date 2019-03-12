@@ -71,147 +71,147 @@ invokeCmd "node bin/release.js $vendorDir $TARGET_SCRATCH_ORG_ALIAS $SFDX_PACKAG
 exit 0
 
 # If review app or CI
-if [ "$STAGE" == "" ]; then
+# if [ "$STAGE" == "" ]; then
 
-  log "Running as a REVIEW APP ..."
-  if [ ! "$CI" == "" ]; then
-    log "Running via CI ..."
-  fi
+#   log "Running as a REVIEW APP ..."
+#   if [ ! "$CI" == "" ]; then
+#     log "Running via CI ..."
+#   fi
 
   # Get sfdx auth url for scratch org
-  scratchSfdxAuthUrlFile=$vendorDir/$TARGET_SCRATCH_ORG_ALIAS
-  scratchSfdxAuthUrl=`cat $scratchSfdxAuthUrlFile`
+  # scratchSfdxAuthUrlFile=$vendorDir/$TARGET_SCRATCH_ORG_ALIAS
+  # scratchSfdxAuthUrl=`cat $scratchSfdxAuthUrlFile`
 
-  debug "scratchSfdxAuthUrl: $scratchSfdxAuthUrl"
+  # debug "scratchSfdxAuthUrl: $scratchSfdxAuthUrl"
 
   # Auth to scratch org
-  auth "$scratchSfdxAuthUrlFile" "" s "$TARGET_SCRATCH_ORG_ALIAS"
+ # auth "$scratchSfdxAuthUrlFile" "" s "$TARGET_SCRATCH_ORG_ALIAS"
 
   # Push source
-  invokeCmd "sfdx force:source:push -u $TARGET_SCRATCH_ORG_ALIAS"
+ # invokeCmd "sfdx force:source:push -u $TARGET_SCRATCH_ORG_ALIAS"
 
   # check to assign permset
-  if [ "$assign_permset" == "true" ]; then
-    invokeCmd "sfdx force:user:permset:assign -n $permset_name -u $TARGET_SCRATCH_ORG_ALIAS"
-  fi
+  # if [ "$assign_permset" == "true" ]; then
+  #   invokeCmd "sfdx force:user:permset:assign -n $permset_name -u $TARGET_SCRATCH_ORG_ALIAS"
+  # fi
 
   # check for data plan NOTE: we aren't parsing the dataplans into an array so expect only a vale
-  if [ "$import_data" == "true" ]; then
-    invokeCmd "sfdx force:data:tree:import -p $data_plans"
-  fi
+  # if [ "$import_data" == "true" ]; then
+  #   invokeCmd "sfdx force:data:tree:import -p $data_plans"
+  # fi
 
   # Show scratch org URL
-  if [ "$show_scratch_org_url" == "true" ]; then
-    if [ ! "$open_path" == "" ]; then
-      invokeCmd "sfdx force:org:open -r -p $open_path"
-    else
-      invokeCmd "sfdx force:org:open -r"
-    fi
-  fi
+#   if [ "$show_scratch_org_url" == "true" ]; then
+#     if [ ! "$open_path" == "" ]; then
+#       invokeCmd "sfdx force:org:open -r -p $open_path"
+#     else
+#       invokeCmd "sfdx force:org:open -r"
+#     fi
+#   fi
 
-fi
+# fi
 
 # If Development, Staging, or Prod
-if [ ! "$STAGE" == "" ]; then
+# if [ ! "$STAGE" == "" ]; then
 
-  log "Detected $STAGE. Kicking off deployment ..."
+#   log "Detected $STAGE. Kicking off deployment ..."
 
-  auth "$vendorDir/sfdxurl" "$SFDX_AUTH_URL" s "$TARGET_SCRATCH_ORG_ALIAS"
+#   auth "$vendorDir/sfdxurl" "$SFDX_AUTH_URL" s "$TARGET_SCRATCH_ORG_ALIAS"
 
-  if [ "$SFDX_INSTALL_PACKAGE_VERSION" == "true" ]
-  then
+#   if [ "$SFDX_INSTALL_PACKAGE_VERSION" == "true" ]
+#   then
 
-    # Auth to Dev Hub
-    auth "$vendorDir/sfdxurl" "$SFDX_DEV_HUB_AUTH_URL" d huborg
+#     # Auth to Dev Hub
+#     auth "$vendorDir/sfdxurl" "$SFDX_DEV_HUB_AUTH_URL" d huborg
 
-    pkgVersionInstallScript=bin/package-install.sh
-    # run package install
-    if [ ! -f "$pkgVersionInstallScript" ];
-    then
+#     pkgVersionInstallScript=bin/package-install.sh
+#     # run package install
+#     if [ ! -f "$pkgVersionInstallScript" ];
+#     then
 
-      # if target stage is production, release the package version
-      if [ "$STAGE" == "PROD" ]; then
+#       # if target stage is production, release the package version
+#       if [ "$STAGE" == "PROD" ]; then
 
-        log "Set package version as released ..."
+#         log "Set package version as released ..."
 
-        invokeCmd "sfdx force:package:version:promote --package \"$SFDX_PACKAGE_VERSION_ID\" --noprompt"
+#         invokeCmd "sfdx force:package:version:promote --package \"$SFDX_PACKAGE_VERSION_ID\" --noprompt"
 
-      fi
+#       fi
 
-      log "Installing package version $SFDX_PACKAGE_NAME ..."
+#       log "Installing package version $SFDX_PACKAGE_NAME ..."
 
-      invokeCmd "sfdx force:package:install --noprompt --package \"$SFDX_PACKAGE_VERSION_ID\" -u \"$TARGET_SCRATCH_ORG_ALIAS\" --wait 1000 --publishwait 1000"
+#       invokeCmd "sfdx force:package:install --noprompt --package \"$SFDX_PACKAGE_VERSION_ID\" -u \"$TARGET_SCRATCH_ORG_ALIAS\" --wait 1000 --publishwait 1000"
 
-    else
+#     else
 
-      # Auth to Dev Hub
-      auth "$vendorDir/sfdxurl" "$SFDX_DEV_HUB_AUTH_URL" d huborg
+#       # Auth to Dev Hub
+#       auth "$vendorDir/sfdxurl" "$SFDX_DEV_HUB_AUTH_URL" d huborg
 
-      log "Calling $pkgVersionInstallScript"
-      sh "$pkgVersionInstallScript" "$TARGET_SCRATCH_ORG_ALIAS" "$STAGE"
+#       log "Calling $pkgVersionInstallScript"
+#       sh "$pkgVersionInstallScript" "$TARGET_SCRATCH_ORG_ALIAS" "$STAGE"
 
-    fi
+#     fi
 
-    if [ "$SFDX_BUILDPACK_DEBUG" == "true" ] ; then
-      invokeCmd "sfdx force:package:installed:list -u \"$TARGET_SCRATCH_ORG_ALIAS\""
-    fi
+#     if [ "$SFDX_BUILDPACK_DEBUG" == "true" ] ; then
+#       invokeCmd "sfdx force:package:installed:list -u \"$TARGET_SCRATCH_ORG_ALIAS\""
+#     fi
 
-  else
+#   else
 
-    log "Source convert and mdapi deploy"
+#     log "Source convert and mdapi deploy"
 
-    mdapiDeployScript=bin/mdapi-deploy.sh
-    # run mdapi-deploy script
-    if [ ! -f "$mdapiDeployScript" ];
-    then
+#     mdapiDeployScript=bin/mdapi-deploy.sh
+#     # run mdapi-deploy script
+#     if [ ! -f "$mdapiDeployScript" ];
+#     then
 
-      invokeCmd "sfdx force:source:convert -d mdapiout -n $SFDX_PACKAGE_NAME "
-      invokeCmd "sfdx force:mdapi:deploy -d mdapiout --wait 1000 -u $TARGET_SCRATCH_ORG_ALIAS"
+#       invokeCmd "sfdx force:source:convert -d mdapiout -n $SFDX_PACKAGE_NAME "
+#       invokeCmd "sfdx force:mdapi:deploy -d mdapiout --wait 1000 -u $TARGET_SCRATCH_ORG_ALIAS"
 
-      # check to see if we need to assign permsets and/or import data
+#       # check to see if we need to assign permsets and/or import data
         
-      # check to assign permset
-      if [ "$assign_permset" == "true" ]; then
-        invokeCmd "sfdx force:user:permset:assign -n $permset_name -u $TARGET_SCRATCH_ORG_ALIAS"
-      fi
+#       # check to assign permset
+#       if [ "$assign_permset" == "true" ]; then
+#         invokeCmd "sfdx force:user:permset:assign -n $permset_name -u $TARGET_SCRATCH_ORG_ALIAS"
+#       fi
 
-      # check for data plan NOTE: we aren't parsing the dataplans into an array so expect only a vale
-      if [ "$import_data" == "true" ]; then
-        invokeCmd "sfdx force:data:tree:import -p $data_plans"
-      fi
+#       # check for data plan NOTE: we aren't parsing the dataplans into an array so expect only a vale
+#       if [ "$import_data" == "true" ]; then
+#         invokeCmd "sfdx force:data:tree:import -p $data_plans"
+#       fi
 
-    else
+#     else
 
-      log "Calling $mdapiDeployScript"
-      sh "$mdapiDeployScript" "$TARGET_SCRATCH_ORG_ALIAS" "$STAGE"
+#       log "Calling $mdapiDeployScript"
+#       sh "$mdapiDeployScript" "$TARGET_SCRATCH_ORG_ALIAS" "$STAGE"
 
-    fi
+#     fi
 
-  fi
+#   fi
 
-  if [ "$run_apex_tests" == "true" ];
-  then
+#   if [ "$run_apex_tests" == "true" ];
+#   then
 
-    log "Running apex tests (this may take awhile) ..."
+#     log "Running apex tests (this may take awhile) ..."
 
-    CMD="sfdx force:apex:test:run --resultformat human --codecoverage -u $TARGET_SCRATCH_ORG_ALIAS --wait 1000 --json | jq -r .result.summary.testRunId"
-    debug "CMD: $CMD"
-    SFDX_TEST_RUN_ID=$(eval $CMD)
-    debug "SFDX_TEST_RUN_ID: $SFDX_TEST_RUN_ID"
+#     CMD="sfdx force:apex:test:run --resultformat human --codecoverage -u $TARGET_SCRATCH_ORG_ALIAS --wait 1000 --json | jq -r .result.summary.testRunId"
+#     debug "CMD: $CMD"
+#     SFDX_TEST_RUN_ID=$(eval $CMD)
+#     debug "SFDX_TEST_RUN_ID: $SFDX_TEST_RUN_ID"
 
-    invokeCmd "sfdx force:apex:test:report --testrunid $SFDX_TEST_RUN_ID --resultformat human --codecoverage -u $TARGET_SCRATCH_ORG_ALIAS --wait 1000 --verbose"
+#     invokeCmd "sfdx force:apex:test:report --testrunid $SFDX_TEST_RUN_ID --resultformat human --codecoverage -u $TARGET_SCRATCH_ORG_ALIAS --wait 1000 --verbose"
 
-  fi
+#   fi
 
-fi
+# fi
 
-postSetupScript=bin/post-setup.sh
-# run post-setup script
-if [ -f "$postSetupScript" ]; then
+# postSetupScript=bin/post-setup.sh
+# # run post-setup script
+# if [ -f "$postSetupScript" ]; then
 
-  debug "Calling $postSetupScript $TARGET_SCRATCH_ORG_ALIAS $STAGE"
-  sh "$postSetupScript" "$TARGET_SCRATCH_ORG_ALIAS" "$STAGE"
-fi
+#   debug "Calling $postSetupScript $TARGET_SCRATCH_ORG_ALIAS $STAGE"
+#   sh "$postSetupScript" "$TARGET_SCRATCH_ORG_ALIAS" "$STAGE"
+# fi
 
 header "DONE! Completed in $(($SECONDS - $START_TIME))s"
 exit 0
