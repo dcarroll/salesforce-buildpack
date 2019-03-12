@@ -251,6 +251,8 @@ if [ ! -f $BUILD_DIR/Procfile ]; then
   echo "# Deploy source to production org.
 release: ./"$vendorDir"/release.sh \"$TARGET_SCRATCH_ORG_ALIAS\" \"$SFDX_PACKAGE_VERSION_ID\"" > $BUILD_DIR/Procfile
 
+  echo "Procfile is: "
+  cat Procfile
   debug "Generated Procfile that will deploy source in release phase and redirect to open-path in web phase"
 fi
 
