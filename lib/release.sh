@@ -67,7 +67,8 @@ debug "data_plans: $data_plans"
 # be easy to access the values set during the compile state.
 # There may be a few values to pass to the node process.
 debug "Launching bin/release.js"
-invokeCmd "node bin/release.js $vendorDir $TARGET_SCRATCH_ORG_ALIAS $SFDX_PACKAGE_VERSION_ID $STAGE"
+debug "XOrg auth file: "$scratchOrgAuthFile 
+invokeCmd "node bin/release.js $vendorDir $TARGET_SCRATCH_ORG_ALIAS $SFDX_PACKAGE_VERSION_ID $scratchOrgAuthFile"
 
 exit 0
 
