@@ -9,6 +9,7 @@ unset GIT_DIR       # Avoid GIT_DIR leak from previous build steps
 
 TARGET_SCRATCH_ORG_ALIAS=${1:-}
 SFDX_PACKAGE_VERSION_ID=${2:-}
+scratchSfdxAuthUrl=${3:-}
 
 vendorDir="vendor/sfdx"
 
@@ -68,7 +69,7 @@ debug "data_plans: $data_plans"
 # There may be a few values to pass to the node process.
 debug "Launching bin/release.js"
 debug "XOrg auth file: "$scratchOrgAuthFile 
-invokeCmd "node bin/release.js $vendorDir $TARGET_SCRATCH_ORG_ALIAS $SFDX_PACKAGE_VERSION_ID $scratchOrgAuthFile"
+invokeCmd "node bin/release.js $vendorDir $TARGET_SCRATCH_ORG_ALIAS $SFDX_PACKAGE_VERSION_ID $scratchSfdxAuthUrl"
 
 exit 0
 
