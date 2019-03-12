@@ -185,7 +185,7 @@ then
     echo "# Log testing org
     sfdx force:org:display -u $TARGET_SCRATCH_ORG_ALIAS" > $testSetupScript
     chmod +x $testSetupScript
-    cat $testSetupScript
+    # cat $testSetupScript
   fi
 
   if [ ! -f $testRunScript ]; then
@@ -203,7 +203,7 @@ exit \$exit_status
 EOF
 
     chmod +x $testRunScript
-    cat $testRunScript
+    # cat $testRunScript
   fi
 
 fi
@@ -240,7 +240,7 @@ sfdx force:org:delete -p -u $TARGET_SCRATCH_ORG_ALIAS --loglevel=error
 EOF
 
   chmod +x $raOrgDeleteScript
-  cat $raOrgDeleteScript
+  # cat $raOrgDeleteScript
 fi
 
 ### Procfile & Release Phase
@@ -249,7 +249,7 @@ fi
 if [ ! -f $BUILD_DIR/Procfile ]; then
   log "Creating Procfile ..."
   echo "# Deploy source to production org.
-release: ./"$vendorDir"/release.sh \"$TARGET_SCRATCH_ORG_ALIAS\" \"$SFDX_PACKAGE_VERSION_ID\" \"$scratchSfdxAuthUrl\"" > $BUILD_DIR/Procfile
+release: ./"$vendorDir"/release.sh \"$TARGET_SCRATCH_ORG_ALIAS\" \"$SFDX_PACKAGE_VERSION_ID\" $scratchSfdxAuthUrl" > $BUILD_DIR/Procfile
 
   echo "Procfile is: "
   cat Procfile
