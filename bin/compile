@@ -113,7 +113,7 @@ devHubAuthFile=$BUILD_DIR/$vendorDir/sfdxurl
 # Review App or CI
 if [ "$STAGE" == "" ]; then
 
-  log "Running as a REVIEW APP ..."
+  log "Running compile.sh as a REVIEW APP ..."
 
   if [ ! "$CI" == "" ]; then
     log "Running via CI ..."
