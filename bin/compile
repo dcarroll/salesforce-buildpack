@@ -265,7 +265,7 @@ fi
 log "Copying files for release phase ..."
 
 debug "$scratchOrgAuthFile to $BUILD_DIR/$vendorDir/$TARGET_SCRATCH_ORG_ALIAS"
-cp $scratchOrgAuthFile $BUILD_DIR/"$vendorDir"/ß
+cp $scratchOrgAuthFile $BUILD_DIR/"$vendorDir"/"$TARGET_SCRATCH_ORG_ALIAS"
 debug "release.sh to $BUILD_DIR/release.sh"
 cp $BP_DIR/lib/release.sh $BUILD_DIR/"$vendorDir"/
 debug "common.sh to $BUILD_DIR/"$vendorDir"/common.sh"
