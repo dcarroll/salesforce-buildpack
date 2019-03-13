@@ -77,7 +77,7 @@ debug "Launching bin/release.js"
 debug "XOrg auth file: "$scratchOrgAuthFile 
 invokeCmd "node bin/release.js v=$vendorDir a=$TARGET_SCRATCH_ORG_ALIAS p=$SFDX_PACKAGE_VERSION_ID x=$scratchSfdxAuthUrl"
 
-exit 0
+# exit 0
 
 # If review app or CI
 # if [ "$STAGE" == "" ]; then
