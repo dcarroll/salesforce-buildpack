@@ -69,8 +69,13 @@ if [ "$CI" == "true" ]; then
 else
   # HEROKU_APP_NAME available via required=true in app.json
   APP_NAME=${HEROKU_APP_NAME:-$SOURCE_VERSION}
-  TARGET_SCRATCH_ORG_ALIAS="ra-$APP_NAME"
-  TARGET_SCRATCH_ORG_NAME="Pipeline Review App: $APP_NAME"
+  if [ "$STAGE" == "" ]; then
+    TARGET_SCRATCH_ORG_ALIAS="ra-$APP_NAME"
+    TARGET_SCRATCH_ORG_NAME="Pipeline Review App: $APP_NAME"
+  else
+    TARGET_SCRATCH_ORG_ALIAS="$STAGE-$APP_NAME"
+    TARGET_SCRATCH_ORG_NAME="Pipeline $STAGE App: $APP_NAME"
+  fi
 fi
 
 # Ensure w/in 80-chars
