@@ -17,6 +17,11 @@ do
   esac
 done
 
+if [ "$SFDX_INSTALL_PACKAGE_VERSION" == "true" ]; then
+  TARGET_SCRATCH_ORG_ALIAS=${1:-}
+  SFDX_PACKAGE_VERSION_ID=${2:-}
+fi
+
 vendorDir="vendor/sfdx"
 
 source "$vendorDir"/common.sh
