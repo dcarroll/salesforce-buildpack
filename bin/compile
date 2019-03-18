@@ -265,7 +265,9 @@ fi
 log "Copying files for release phase ..."
 if [ "$STAGE" == "" ]; then
   debug "$scratchOrgAuthFile to $BUILD_DIR/$vendorDir/$TARGET_SCRATCH_ORG_ALIAS"
-  cp $scratchOrgAuthFile $BUILD_DIR/"$vendorDir"/"$TARGET_SCRATCH_ORG_ALIAS"
+  if [ ! -f $scratchOrgAuthFile ]; then
+    cp $scratchOrgAuthFile $BUILD_DIR/"$vendorDir"/"$TARGET_SCRATCH_ORG_ALIAS"
+  fi
 fi
 debug "release.sh to $BUILD_DIR/release.sh"
 cp $BP_DIR/lib/release.sh $BUILD_DIR/"$vendorDir"/
