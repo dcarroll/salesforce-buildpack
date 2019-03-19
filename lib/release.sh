@@ -13,7 +13,8 @@ do
   in
     a) TARGET_SCRATCH_ORG_ALIAS=${OPTARG};;
     p) SFDX_PACKAGE_VERSION_ID=${OPTARG};;
-    x) scratchSfdxAuthUrl=${OPTARG}
+    x) scratchSfdxAuthUrl=${OPTARG};;
+    s) SOURCE_VERSION=${OPTARG};;
   esac
 done
 
@@ -63,7 +64,7 @@ debug "WHOAMI: $whoami"
 # There may be a few values to pass to the node process.
 debug "Launching bin/release.js"
 debug "XOrg auth file: "$scratchOrgAuthFile 
-invokeCmd "node bin/release.js v=$vendorDir a=$TARGET_SCRATCH_ORG_ALIAS p=$SFDX_PACKAGE_VERSION_ID x=$scratchSfdxAuthUrl"
+invokeCmd "node bin/release.js v=$vendorDir a=$TARGET_SCRATCH_ORG_ALIAS p=$SFDX_PACKAGE_VERSION_ID x=$scratchSfdxAuthUrl s=$SOURCE_VERSION"
 
 header "DONE! Completed in $(($SECONDS - $START_TIME))s"
 exit 0
