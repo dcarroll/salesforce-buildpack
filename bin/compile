@@ -86,6 +86,7 @@ debug "TARGET_SCRATCH_ORG_NAME: $TARGET_SCRATCH_ORG_NAME"
 
 whoami=$(whoami)
 debug "WHOAMI: $whoami"
+debug "SOURCE_VERSION $SOURCE_VERSION"
 
 # Create a bin and vendor directory
 mkdir -p $BUILD_DIR/bin
