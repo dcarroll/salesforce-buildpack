@@ -7,7 +7,7 @@ set -o errexit      # always exit on error
 set -o pipefail     # don't ignore exit codes when piping output
 unset GIT_DIR       # Avoid GIT_DIR leak from previous build steps
 
-while getopts "a:p:x:" option
+while getopts "a:p:x:s:" option
 do
   case "${option}"
   in
