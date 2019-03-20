@@ -9,10 +9,10 @@ set -o pipefail     # don't ignore exit codes when piping output
 unset GIT_DIR       # Avoid GIT_DIR leak from previous build steps
 
 ### Configure directories
-BUILD_DIR=${1:-}
-CACHE_DIR=${2:-}
-ENV_DIR=${3:-}
-BP_DIR=$(cd $(dirname ${0:-}); cd ..; pwd)
+export BUILD_DIR=${1:-}
+export CACHE_DIR=${2:-}
+export ENV_DIR=${3:-}
+export BP_DIR=$(cd $(dirname ${0:-}); cd ..; pwd)
 
 # set defaults for optional config vars
 : ${SFDX_BUILDPACK_DEBUG:="false"}
@@ -38,9 +38,9 @@ debug "BP_DIR: $BP_DIR"
 setup_dirs "$BUILD_DIR"
 
 # CLI details
-SFDX_VERSION=$(sfdx version)
+export SFDX_VERSION=$(sfdx version)
 debug "sfdx version: $SFDX_VERSION"
-SFDX_PLUGINS=$(sfdx plugins --core)
+export SFDX_PLUGINS=$(sfdx plugins --core)
 debug "Plugins: $SFDX_PLUGINS"
 
 # Log config
@@ -68,7 +68,7 @@ if [ "$CI" == "true" ]; then
   TARGET_SCRATCH_ORG_NAME="Pipeline CI: $HEROKU_TEST_RUN_BRANCH $HEROKU_TEST_RUN_ID"
 else
   # HEROKU_APP_NAME available via required=true in app.json
-  APP_NAME=${HEROKU_APP_NAME:-$SOURCE_VERSION}
+  export APP_NAME=${HEROKU_APP_NAME:-$SOURCE_VERSION}
   if [ "$STAGE" == "" ]; then
     TARGET_SCRATCH_ORG_ALIAS="ra-$APP_NAME"
     TARGET_SCRATCH_ORG_NAME="Pipeline Review App: $APP_NAME"
@@ -79,7 +79,8 @@ else
 fi
 
 # Ensure w/in 80-chars
-TARGET_SCRATCH_ORG_NAME=$(echo ${TARGET_SCRATCH_ORG_NAME:0:79})
+export TARGET_SCRATCH_ORG_NAME=$(echo ${TARGET_SCRATCH_ORG_NAME:0:79})
+export TARGET_SCRATCH_ORG_ALIAS
 
 debug "TARGET_SCRATCH_ORG_ALIAS: $TARGET_SCRATCH_ORG_ALIAS"
 debug "TARGET_SCRATCH_ORG_NAME: $TARGET_SCRATCH_ORG_NAME"
@@ -114,7 +115,7 @@ debug "open-path: $open_path"
 debug "data-plans: $data_plans"
 
 # Set path for Dev Hub auth file
-devHubAuthFile=$BUILD_DIR/$vendorDir/sfdxurl
+export devHubAuthFile=$BUILD_DIR/$vendorDir/sfdxurl
 
 # Review App or CI
 if [ "$STAGE" == "" ]; then
@@ -133,11 +134,11 @@ if [ "$STAGE" == "" ]; then
   invokeCmd "sfdx force:org:create -s -f \"$scratch_org_def\" -a $TARGET_SCRATCH_ORG_ALIAS orgName=\"$TARGET_SCRATCH_ORG_NAME\""
 
   # Store creds for scratch org
-  scratchSfdxAuthUrl=$(sfdx force:org:display --verbose -u $TARGET_SCRATCH_ORG_ALIAS --json | jq -r .result.sfdxAuthUrl)
+  export scratchSfdxAuthUrl=$(sfdx force:org:display --verbose -u $TARGET_SCRATCH_ORG_ALIAS --json | jq -r .result.sfdxAuthUrl)
   debug "scratchSfdxAuthUrl: $scratchSfdxAuthUrl"
   
   # Store creds in file reflecting the source version (if not running CI)
-  scratchOrgAuthFile=$BUILD_DIR/$vendorDir/$TARGET_SCRATCH_ORG_ALIAS
+  export scratchOrgAuthFile=$BUILD_DIR/$vendorDir/$TARGET_SCRATCH_ORG_ALIAS
   echo "$scratchSfdxAuthUrl" > $scratchOrgAuthFile
   debug "stored in file: $scratchOrgAuthFile"
   
