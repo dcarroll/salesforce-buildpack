@@ -163,12 +163,12 @@ then
     SFDX_PACKAGE_ID=$(eval $CMD)
     debug "SFDX_PACKAGE_ID: $SFDX_PACKAGE_ID"
 
-    log "Creating new package version (this may take awhile) ..."
+    # log "Creating new package version (this may take awhile) ..."
 
     # create package version
-    CMD="sfdx force:package:version:create --package $SFDX_PACKAGE_ID --wait 100 --installationkeybypass --json | jq -r .result.SubscriberPackageVersionId"
-    SFDX_PACKAGE_VERSION_ID=$(eval $CMD)
-    debug "SFDX_PACKAGE_VERSION_ID: $SFDX_PACKAGE_VERSION_ID"
+    # CMD="sfdx force:package:version:create --package $SFDX_PACKAGE_ID --wait 100 --installationkeybypass --json | jq -r .result.SubscriberPackageVersionId"
+    # SFDX_PACKAGE_VERSION_ID=$(eval $CMD)
+    # debug "SFDX_PACKAGE_VERSION_ID: $SFDX_PACKAGE_VERSION_ID"
 
   else
 
